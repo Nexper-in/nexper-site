@@ -443,6 +443,7 @@ button,select,input{font-family:inherit}
 <script src="https://accounts.google.com/gsi/client" async></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <!-- LANDING PAGE -->
@@ -615,6 +616,11 @@ button,select,input{font-family:inherit}
     <div class="nav-item" data-view="purchases" onclick="navigate('purchases')">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
       Purchases
+    </div>
+    <div class="nav-section-label" id="admin-nav-section" style="display:none">Owner</div>
+    <div class="nav-item" id="admin-nav-item" data-view="admin" onclick="navigate('admin')" style="display:none">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+      Admin Panel
     </div>
     <div class="nav-section-label">Settings</div>
     <div class="nav-item" onclick="openSettings()">
@@ -876,6 +882,32 @@ button,select,input{font-family:inherit}
       </button>
     </div>
     <div id="khata-list"></div>
+  </div>
+
+  <!-- ADMIN PANEL -->
+  <div class="page" id="page-admin">
+    <div class="sec-head" style="margin-bottom:20px">
+      <div class="sec-title" style="font-size:18px">Owner Admin Panel</div>
+      <button class="btn btn-sm" onclick="loadAdminData()" style="font-size:12px">↻ Refresh</button>
+    </div>
+    <!-- Summary tiles -->
+    <div class="stats-row" style="margin-bottom:24px" id="admin-stats-row">
+      <div class="stat-tile"><div class="stat-tile-label">Total Users</div><div class="stat-tile-val" id="admin-total-users">—</div><div class="stat-tile-sub">Signed up so far</div></div>
+      <div class="stat-tile"><div class="stat-tile-label">Active Today</div><div class="stat-tile-val ok" id="admin-today-users">—</div><div class="stat-tile-sub">Logged in today</div></div>
+      <div class="stat-tile"><div class="stat-tile-label">This Week</div><div class="stat-tile-val accent" id="admin-week-users">—</div><div class="stat-tile-sub">Logged in this week</div></div>
+      <div class="stat-tile"><div class="stat-tile-label">Total Logins</div><div class="stat-tile-val" id="admin-total-logins">—</div><div class="stat-tile-sub">All-time sign-ins</div></div>
+    </div>
+    <!-- Users table -->
+    <div class="tcard">
+      <table>
+        <thead><tr>
+          <th>User</th><th>Email</th><th>First Login</th><th>Last Login</th><th style="text-align:right">Logins</th>
+        </tr></thead>
+        <tbody id="admin-users-tbody">
+          <tr><td colspan="5" style="text-align:center;color:var(--t3);padding:24px">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <!-- PURCHASES -->
@@ -1389,7 +1421,7 @@ function saveData() {
 }
 
 // ── Navigation ────────────────────────────────────────
-const VIEW_TITLES = {dashboard:'Dashboard', inventory:'Inventory', newsale:'New Sale', history:'Sales History', khata:'Khata Ledger', purchases:'Purchases'};
+const VIEW_TITLES = {dashboard:'Dashboard', inventory:'Inventory', newsale:'New Sale', history:'Sales History', khata:'Khata Ledger', purchases:'Purchases', admin:'Admin Panel'};
 
 function navigate(view, stockSort) {
   currentView = view;
@@ -1401,6 +1433,7 @@ function navigate(view, stockSort) {
   if (window.innerWidth <= 700) document.getElementById('sidebar').classList.remove('open');
   if (view === 'dashboard') renderDashboard();
   else if (view === 'inventory') renderInventory();
+  else if (view === 'admin') loadAdminData();
   else if (view === 'newsale') renderPOS();
   else if (view === 'history') renderHistory();
   else if (view === 'khata') renderKhata();
@@ -2713,10 +2746,12 @@ function importData(event) {
 }
 
 // ── Auth ──────────────────────────────────────────────
-const GIS_CLIENT_ID = '232683610642-9r5g32j9skbfml6uut3bviera37q5gpg.apps.googleusercontent.com';
-const AUTH_KEY = 'kb_auth_user';
-let _authUser  = null;
-let _fbAuth    = null;
+const GIS_CLIENT_ID  = '232683610642-9r5g32j9skbfml6uut3bviera37q5gpg.apps.googleusercontent.com';
+const OWNER_EMAIL    = 'maqbooln2022@gmail.com';
+const AUTH_KEY       = 'kb_auth_user';
+let _authUser        = null;
+let _fbAuth          = null;
+let _db              = null;
 let _recaptchaVerifier  = null;
 let _confirmationResult = null;
 let _appAlreadyShown    = false;
@@ -2737,13 +2772,28 @@ function handleGoogleCredential(response) {
     var payload = JSON.parse(atob(b64));
     _authUser = { name: payload.name, email: payload.email, picture: payload.picture, sub: payload.sub };
     localStorage.setItem(AUTH_KEY, JSON.stringify(_authUser));
-    // Register in Firebase so login count appears in Firebase Console → Authentication → Users
+    // Register in Firebase Auth
     if (_fbAuth) {
       var fbCredential = firebase.auth.GoogleAuthProvider.credential(response.credential);
       _fbAuth.signInWithCredential(fbCredential).catch(function(){});
     }
+    // Track sign-in in Firestore
+    trackUserLogin(_authUser);
     showApp();
   } catch(e) { showLoginError('Sign-in error. Please try again.'); }
+}
+
+function trackUserLogin(user) {
+  if (!_db || !user || !user.sub) return;
+  var ref = _db.collection('nexper_users').doc(user.sub);
+  ref.get().then(function(doc) {
+    var now = new Date().toISOString();
+    if (doc.exists) {
+      ref.update({ lastLogin: now, loginCount: (doc.data().loginCount || 0) + 1, name: user.name, picture: user.picture });
+    } else {
+      ref.set({ name: user.name, email: user.email, picture: user.picture, uid: user.sub, firstLogin: now, lastLogin: now, loginCount: 1 });
+    }
+  }).catch(function(){});
 }
 
 function initAuth() {
@@ -2764,11 +2814,12 @@ function initAuth() {
   // Init GIS for Google sign-in (smooth, no passkey prompt)
   waitForGIS();
 
-  // Init Firebase for Phone OTP
+  // Init Firebase for Phone OTP + Firestore tracking
   try {
     firebase.initializeApp(_fbConfig);
     _fbAuth = firebase.auth();
     _fbAuth.useDeviceLanguage();
+    _db = firebase.firestore();
   } catch(e) {}
 }
 
@@ -2872,6 +2923,11 @@ function showApp() {
     document.getElementById('sb-user-initial').textContent = (_authUser.name || 'U').trim().charAt(0).toUpperCase();
     document.getElementById('sb-user-name').textContent  = _authUser.name;
     document.getElementById('sb-user-email').textContent = _authUser.email || _authUser.phone || '';
+    // Show Admin Panel only for owner
+    if (_authUser.email === OWNER_EMAIL) {
+      document.getElementById('admin-nav-section').style.display = '';
+      document.getElementById('admin-nav-item').style.display = 'flex';
+    }
   }
   doInit();
 }
@@ -2886,6 +2942,49 @@ function logout() {
   if (_fbAuth) _fbAuth.signOut().catch(function(){});
   if (typeof google !== 'undefined' && google.accounts) google.accounts.id.disableAutoSelect();
   location.reload();
+}
+
+// ── Admin Panel ───────────────────────────────────────
+function loadAdminData() {
+  if (!_db) { return; }
+  var tbody = document.getElementById('admin-users-tbody');
+  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--t3);padding:24px">Loading...</td></tr>';
+  _db.collection('nexper_users').orderBy('lastLogin','desc').get().then(function(snap) {
+    var users = [];
+    snap.forEach(function(doc){ users.push(doc.data()); });
+    var today = new Date(); today.setHours(0,0,0,0);
+    var week  = new Date(today); week.setDate(week.getDate()-6);
+    var totalLogins = 0, todayCount = 0, weekCount = 0;
+    users.forEach(function(u){
+      totalLogins += u.loginCount || 0;
+      var last = new Date(u.lastLogin);
+      if (last >= today) todayCount++;
+      if (last >= week)  weekCount++;
+    });
+    document.getElementById('admin-total-users').textContent  = users.length;
+    document.getElementById('admin-today-users').textContent  = todayCount;
+    document.getElementById('admin-week-users').textContent   = weekCount;
+    document.getElementById('admin-total-logins').textContent = totalLogins;
+    if (!users.length) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--t3);padding:24px">No users yet</td></tr>';
+      return;
+    }
+    tbody.innerHTML = users.map(function(u){
+      var initial = (u.name||'?').charAt(0).toUpperCase();
+      var fl = u.firstLogin ? new Date(u.firstLogin).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) : '—';
+      var ll = u.lastLogin  ? new Date(u.lastLogin).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
+      var isOwner = u.email === OWNER_EMAIL ? ' <span style="font-size:10px;background:var(--accent);color:#fff;padding:2px 7px;border-radius:20px;font-weight:700">Owner</span>' : '';
+      return '<tr>'
+        +'<td><div style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0">'+initial+'</div><span style="font-weight:600">'+u.name+isOwner+'</span></div></td>'
+        +'<td style="color:var(--t2)">'+u.email+'</td>'
+        +'<td style="color:var(--t3)">'+fl+'</td>'
+        +'<td style="color:var(--t2)">'+ll+'</td>'
+        +'<td style="text-align:right;font-weight:700;font-variant-numeric:tabular-nums">'+( u.loginCount||0)+'</td>'
+        +'</tr>';
+    }).join('');
+  }).catch(function(err){
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--err);padding:24px">Could not load data. Check Firestore rules.</td></tr>';
+  });
 }
 
 // ── Init ──────────────────────────────────────────────
