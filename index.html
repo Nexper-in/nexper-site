@@ -297,7 +297,25 @@ button,select,input{font-family:inherit}
 .login-brand{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px}
 .login-brand-icon{width:44px;height:44px;background:var(--brand);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .login-app-name{font-family:'Libre Baskerville',Georgia,serif;font-size:24px;font-weight:700;color:var(--t1)}
-.login-tagline{font-size:13px;color:var(--t3);margin-bottom:36px;line-height:1.5}
+.login-tagline{font-size:13px;color:var(--t3);margin-bottom:28px;line-height:1.5}
+.login-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:12px 16px;border-radius:var(--r);font-size:14px;font-weight:700;cursor:pointer;transition:all .18s;border:2px solid transparent;font-family:inherit}
+.login-btn-google{background:var(--surface);border-color:var(--border);color:var(--t1)}
+.login-btn-google:hover{border-color:var(--brand);background:var(--info-bg)}
+.login-btn-phone{background:var(--brand);color:#fff;margin-top:10px}
+.login-btn-phone:hover{background:var(--brand-l)}
+.login-btn-send{background:var(--brand);color:#fff;margin-top:12px}
+.login-btn-send:hover{background:var(--brand-l)}
+.login-divider{display:flex;align-items:center;gap:12px;margin:16px 0;color:var(--t3);font-size:12px}
+.login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.login-input{width:100%;padding:11px 14px;border:2px solid var(--border);border-radius:var(--r);font-size:14px;background:var(--surface);color:var(--t1);outline:none;transition:border-color .18s;font-family:inherit}
+.login-input:focus{border-color:var(--brand)}
+.login-step{display:none}
+.login-step.active{display:block}
+.login-back{background:none;border:none;color:var(--t3);font-size:12px;cursor:pointer;margin-top:14px;font-family:inherit;text-decoration:underline}
+.login-back:hover{color:var(--t1)}
+.login-error{color:var(--err);font-size:12px;margin-top:12px;display:none;text-align:center}
+#recaptcha-container{display:flex;justify-content:center;margin:12px 0}
+#recaptcha-container>div{margin:0 auto}
 
 /* User avatar */
 .user-avatar-wrap{position:relative;display:flex;align-items:center}
@@ -365,7 +383,8 @@ button,select,input{font-family:inherit}
 @media print{.modal-bd{background:#fff!important}.no-print{display:none!important}}
 </style>
 
-<script src="https://accounts.google.com/gsi/client" async></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <!-- LOGIN SCREEN -->
@@ -378,8 +397,42 @@ button,select,input{font-family:inherit}
       <div class="login-app-name">Nexper</div>
     </div>
     <div class="login-tagline">Smart Billing &amp; Ledger for Your Dukan</div>
-    <div id="google-signin-btn" style="display:flex;justify-content:center;min-height:44px"></div>
-    <p style="font-size:11px;color:var(--t3);margin-top:20px">Sign in with your Google account to access your store</p>
+
+    <!-- Step: choose method -->
+    <div class="login-step active" id="login-step-choose">
+      <button class="login-btn login-btn-google" onclick="signInWithGoogle()">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg>
+        Sign in with Google
+      </button>
+      <div class="login-divider">or</div>
+      <button class="login-btn login-btn-phone" onclick="showLoginStep('phone')">
+        <svg width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+        Sign in with Mobile Number
+      </button>
+    </div>
+
+    <!-- Step: enter phone -->
+    <div class="login-step" id="login-step-phone">
+      <p style="font-size:13px;color:var(--t2);margin-bottom:14px;text-align:left;font-weight:600">Enter your mobile number</p>
+      <div style="display:flex;gap:8px;margin-bottom:12px">
+        <span style="padding:11px 12px;border:2px solid var(--border);border-radius:var(--r);color:var(--t2);font-size:14px;font-weight:700;white-space:nowrap;background:var(--surface-2)">+91</span>
+        <input class="login-input" id="phone-input" type="tel" placeholder="10-digit mobile number" maxlength="10" inputmode="numeric">
+      </div>
+      <div id="recaptcha-container"></div>
+      <button class="login-btn login-btn-send" onclick="sendOTP()">Send OTP</button>
+      <button class="login-back" onclick="showLoginStep('choose')">← Back</button>
+    </div>
+
+    <!-- Step: enter OTP -->
+    <div class="login-step" id="login-step-otp">
+      <p style="font-size:13px;color:var(--t2);margin-bottom:6px">OTP sent to <strong id="otp-phone-display"></strong></p>
+      <p style="font-size:12px;color:var(--t3);margin-bottom:14px">Enter the 6-digit code</p>
+      <input class="login-input" id="otp-input" type="text" placeholder="• • • • • •" maxlength="6" inputmode="numeric" style="text-align:center;font-size:20px;letter-spacing:6px">
+      <button class="login-btn login-btn-send" onclick="verifyOTP()" style="margin-top:14px">Verify OTP</button>
+      <button class="login-back" onclick="showLoginStep('phone')">← Resend OTP</button>
+    </div>
+
+    <div class="login-error" id="login-error"></div>
   </div>
 </div>
 
@@ -2522,22 +2575,127 @@ function importData(event) {
   reader.readAsText(file);
 }
 
-// ── Auth ──────────────────────────────────────────────
-const CLIENT_ID = '232683610642-9r5g32j9skbfml6uut3bviera37q5gpg.apps.googleusercontent.com';
-const AUTH_KEY  = 'kb_auth_user';
-let _authUser   = null;
+// ── Auth (Firebase) ───────────────────────────────────
+const AUTH_KEY = 'kb_auth_user';
+let _authUser  = null;
+let _fbAuth    = null;
+let _recaptchaVerifier   = null;
+let _confirmationResult  = null;
+let _appAlreadyShown     = false;
 
-function handleGoogleCredential(response) {
+const _fbConfig = {
+  apiKey:            "AIzaSyALoybzTwBJH4w6TzCbn52me9dwoiFWS8I",
+  authDomain:        "nexper-fd4f1.firebaseapp.com",
+  projectId:         "nexper-fd4f1",
+  storageBucket:     "nexper-fd4f1.firebasestorage.app",
+  messagingSenderId: "317116060707",
+  appId:             "1:317116060707:web:dbcba8634e519638c94d96"
+};
+
+function initFirebaseAuth() {
   try {
-    const b64 = response.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
-    const payload = JSON.parse(atob(b64));
-    _authUser = { name: payload.name, email: payload.email, picture: payload.picture, sub: payload.sub };
-    localStorage.setItem(AUTH_KEY, JSON.stringify(_authUser));
+    firebase.initializeApp(_fbConfig);
+    _fbAuth = firebase.auth();
+    _fbAuth.useDeviceLanguage();
+  } catch(e) {
+    document.getElementById('login-overlay').style.display = 'flex';
+    return;
+  }
+
+  // Check cached session first (instant load)
+  try {
+    const stored = localStorage.getItem(AUTH_KEY);
+    _authUser = stored ? JSON.parse(stored) : null;
+  } catch(e) { _authUser = null; }
+
+  if (_authUser) {
     showApp();
-  } catch(e) { showToast('Sign-in error. Please try again.', 'warn'); }
+  } else {
+    document.getElementById('login-overlay').style.display = 'flex';
+  }
+
+  // Firebase auth state listener handles token refresh / sign-out
+  _fbAuth.onAuthStateChanged(function(user) {
+    if (user) {
+      const u = {
+        name:    user.displayName || user.phoneNumber || 'User',
+        email:   user.email || '',
+        picture: user.photoURL || '',
+        sub:     user.uid,
+        phone:   user.phoneNumber || ''
+      };
+      _authUser = u;
+      localStorage.setItem(AUTH_KEY, JSON.stringify(u));
+      if (!_appAlreadyShown) showApp();
+    } else {
+      // Signed out — clear cache and reload to login
+      if (_appAlreadyShown) {
+        localStorage.removeItem(AUTH_KEY);
+        location.reload();
+      }
+    }
+  });
+}
+
+function signInWithGoogle() {
+  var provider = new firebase.auth.GoogleAuthProvider();
+  _fbAuth.signInWithPopup(provider).catch(function(err) {
+    showLoginError('Google sign-in failed. Please try again.');
+  });
+}
+
+function showLoginStep(step) {
+  document.querySelectorAll('.login-step').forEach(function(el){ el.classList.remove('active'); });
+  document.getElementById('login-step-' + step).classList.add('active');
+  showLoginError('');
+  if (step === 'phone' && !_recaptchaVerifier) {
+    _recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+      size: 'normal',
+      callback: function() {}
+    });
+    _recaptchaVerifier.render().catch(function(){});
+  }
+}
+
+function sendOTP() {
+  var phone = (document.getElementById('phone-input').value || '').trim();
+  if (!/^\d{10}$/.test(phone)) {
+    showLoginError('Enter a valid 10-digit mobile number');
+    return;
+  }
+  showLoginError('Sending OTP…');
+  _fbAuth.signInWithPhoneNumber('+91' + phone, _recaptchaVerifier)
+    .then(function(result) {
+      _confirmationResult = result;
+      document.getElementById('otp-phone-display').textContent = '+91 ' + phone;
+      showLoginStep('otp');
+    })
+    .catch(function(err) {
+      showLoginError('Could not send OTP. ' + (err.message || ''));
+      if (_recaptchaVerifier) { try { _recaptchaVerifier.reset(); } catch(e){} }
+    });
+}
+
+function verifyOTP() {
+  var code = (document.getElementById('otp-input').value || '').trim();
+  if (!/^\d{6}$/.test(code)) {
+    showLoginError('Enter the 6-digit OTP');
+    return;
+  }
+  showLoginError('Verifying…');
+  _confirmationResult.confirm(code).catch(function() {
+    showLoginError('Invalid OTP. Please try again.');
+  });
+}
+
+function showLoginError(msg) {
+  var el = document.getElementById('login-error');
+  el.textContent = msg;
+  el.style.display = msg ? 'block' : 'none';
 }
 
 function showApp() {
+  _appAlreadyShown = true;
   document.getElementById('login-overlay').style.display = 'none';
   document.getElementById('app-shell').style.display    = 'flex';
   const wrap = document.getElementById('user-avatar-wrap');
@@ -2547,15 +2705,14 @@ function showApp() {
     img.src = _authUser.picture || '';
     img.alt = _authUser.name;
     document.getElementById('user-dd-name').textContent  = _authUser.name;
-    document.getElementById('user-dd-email').textContent = _authUser.email;
+    document.getElementById('user-dd-email').textContent = _authUser.email || _authUser.phone || '';
     const logoutBtn = document.getElementById('sb-logout-btn');
     if (logoutBtn) logoutBtn.style.display = 'flex';
-    // Sidebar user chip
     const sbUser = document.getElementById('sb-user');
     if (sbUser) sbUser.style.display = 'flex';
-    document.getElementById('sb-user-initial').textContent = _authUser.name.trim().charAt(0).toUpperCase();
+    document.getElementById('sb-user-initial').textContent = (_authUser.name || 'U').trim().charAt(0).toUpperCase();
     document.getElementById('sb-user-name').textContent  = _authUser.name;
-    document.getElementById('sb-user-email').textContent = _authUser.email;
+    document.getElementById('sb-user-email').textContent = _authUser.email || _authUser.phone || '';
   }
   doInit();
 }
@@ -2567,30 +2724,8 @@ function toggleUserDropdown() {
 function logout() {
   localStorage.removeItem(AUTH_KEY);
   localStorage.removeItem(SETTINGS_KEY);
-  if (typeof google !== 'undefined' && google.accounts) google.accounts.id.disableAutoSelect();
+  if (_fbAuth) _fbAuth.signOut().catch(function(){});
   location.reload();
-}
-
-function initGoogleAuth() {
-  if (typeof google === 'undefined' || !google.accounts) {
-    setTimeout(initGoogleAuth, 100);
-    return;
-  }
-  google.accounts.id.initialize({ client_id: CLIENT_ID, callback: handleGoogleCredential });
-  try {
-    const stored = localStorage.getItem(AUTH_KEY);
-    _authUser = stored ? JSON.parse(stored) : null;
-  } catch(e) { _authUser = null; }
-
-  if (_authUser) {
-    showApp();
-  } else {
-    document.getElementById('login-overlay').style.display = 'flex';
-    google.accounts.id.renderButton(
-      document.getElementById('google-signin-btn'),
-      { theme: 'outline', size: 'large', width: 300, text: 'signin_with' }
-    );
-  }
 }
 
 // ── Init ──────────────────────────────────────────────
@@ -2606,5 +2741,5 @@ document.querySelectorAll('.modal-bd').forEach(bd => {
   bd.addEventListener('click', e => { if (e.target === bd) bd.classList.remove('open'); });
 });
 
-initGoogleAuth();
+initFirebaseAuth();
 </script>
