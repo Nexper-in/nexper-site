@@ -440,6 +440,7 @@ button,select,input{font-family:inherit}
 @media print{.modal-bd{background:#fff!important}.no-print{display:none!important}}
 </style>
 
+<script src="https://accounts.google.com/gsi/client" async></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -539,10 +540,7 @@ button,select,input{font-family:inherit}
 
     <!-- Step: choose method -->
     <div class="login-step active" id="login-step-choose">
-      <button class="login-btn login-btn-google" onclick="signInWithGoogle()">
-        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg>
-        Sign in with Google
-      </button>
+      <div id="gis-btn-wrap" style="display:flex;justify-content:center;min-height:44px;margin-bottom:4px"></div>
       <div class="login-divider">or</div>
       <button class="login-btn login-btn-phone" onclick="showLoginStep('phone')">
         <svg width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
@@ -2714,13 +2712,14 @@ function importData(event) {
   reader.readAsText(file);
 }
 
-// ── Auth (Firebase) ───────────────────────────────────
+// ── Auth ──────────────────────────────────────────────
+const GIS_CLIENT_ID = '232683610642-9r5g32j9skbfml6uut3bviera37q5gpg.apps.googleusercontent.com';
 const AUTH_KEY = 'kb_auth_user';
 let _authUser  = null;
 let _fbAuth    = null;
-let _recaptchaVerifier   = null;
-let _confirmationResult  = null;
-let _appAlreadyShown     = false;
+let _recaptchaVerifier  = null;
+let _confirmationResult = null;
+let _appAlreadyShown    = false;
 
 const _fbConfig = {
   apiKey:            "AIzaSyALoybzTwBJH4w6TzCbn52me9dwoiFWS8I",
@@ -2731,63 +2730,71 @@ const _fbConfig = {
   appId:             "1:317116060707:web:dbcba8634e519638c94d96"
 };
 
-function initFirebaseAuth() {
+// GIS callback — called when user picks a Google account
+function handleGoogleCredential(response) {
   try {
-    firebase.initializeApp(_fbConfig);
-    _fbAuth = firebase.auth();
-    _fbAuth.useDeviceLanguage();
-  } catch(e) {
-    document.getElementById('login-overlay').style.display = 'flex';
-    return;
-  }
+    var b64 = response.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+    var payload = JSON.parse(atob(b64));
+    _authUser = { name: payload.name, email: payload.email, picture: payload.picture, sub: payload.sub };
+    localStorage.setItem(AUTH_KEY, JSON.stringify(_authUser));
+    showApp();
+  } catch(e) { showLoginError('Sign-in error. Please try again.'); }
+}
 
-  // Check cached session first (instant load)
+function initAuth() {
+  // Check cached session (instant load)
   try {
-    const stored = localStorage.getItem(AUTH_KEY);
+    var stored = localStorage.getItem(AUTH_KEY);
     _authUser = stored ? JSON.parse(stored) : null;
   } catch(e) { _authUser = null; }
 
   if (_authUser) {
     showApp();
-  } else {
-    document.getElementById('landing-page').style.display = 'block';
+    return;
   }
 
-  // Firebase auth state listener handles token refresh / sign-out
-  _fbAuth.onAuthStateChanged(function(user) {
-    if (user) {
-      const u = {
-        name:    user.displayName || user.phoneNumber || 'User',
-        email:   user.email || '',
-        picture: user.photoURL || '',
-        sub:     user.uid,
-        phone:   user.phoneNumber || ''
-      };
-      _authUser = u;
-      localStorage.setItem(AUTH_KEY, JSON.stringify(u));
-      if (!_appAlreadyShown) showApp();
-    } else {
-      // Signed out — clear cache and reload to login
-      if (_appAlreadyShown) {
-        localStorage.removeItem(AUTH_KEY);
-        location.reload();
-      }
-    }
+  // Not logged in — show landing page
+  document.getElementById('landing-page').style.display = 'block';
+
+  // Init GIS for Google sign-in (smooth, no passkey prompt)
+  waitForGIS();
+
+  // Init Firebase for Phone OTP
+  try {
+    firebase.initializeApp(_fbConfig);
+    _fbAuth = firebase.auth();
+    _fbAuth.useDeviceLanguage();
+  } catch(e) {}
+}
+
+function waitForGIS() {
+  if (typeof google === 'undefined' || !google.accounts) {
+    setTimeout(waitForGIS, 100);
+    return;
+  }
+  google.accounts.id.initialize({
+    client_id: GIS_CLIENT_ID,
+    callback: handleGoogleCredential,
+    auto_select: false,
+    cancel_on_tap_outside: true
   });
+}
+
+function renderGISButton() {
+  if (typeof google === 'undefined' || !google.accounts) {
+    setTimeout(renderGISButton, 100);
+    return;
+  }
+  google.accounts.id.renderButton(
+    document.getElementById('gis-btn-wrap'),
+    { theme: 'outline', size: 'large', width: 300, text: 'signin_with' }
+  );
 }
 
 function showLoginOverlay() {
   document.getElementById('landing-page').style.display = 'none';
   document.getElementById('login-overlay').style.display = 'flex';
-}
-
-function signInWithGoogle() {
-  var provider = new firebase.auth.GoogleAuthProvider();
-  _fbAuth.signInWithPopup(provider).catch(function(err) {
-    if (err.code !== 'auth/popup-closed-by-user') {
-      showLoginError('Google sign-in failed. Please try again.');
-    }
-  });
+  renderGISButton();
 }
 
 function showLoginStep(step) {
@@ -2872,6 +2879,7 @@ function logout() {
   localStorage.removeItem(AUTH_KEY);
   localStorage.removeItem(SETTINGS_KEY);
   if (_fbAuth) _fbAuth.signOut().catch(function(){});
+  if (typeof google !== 'undefined' && google.accounts) google.accounts.id.disableAutoSelect();
   location.reload();
 }
 
@@ -2888,5 +2896,5 @@ document.querySelectorAll('.modal-bd').forEach(bd => {
   bd.addEventListener('click', e => { if (e.target === bd) bd.classList.remove('open'); });
 });
 
-initFirebaseAuth();
+initAuth();
 </script>
