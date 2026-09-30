@@ -1,5 +1,5 @@
 <meta charset="UTF-8">
-<title>SabStore</title>
+<title>Nexper</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito+Sans:opsz,wght@6..12,300;6..12,400;6..12,600;6..12,700;6..12,800&display=swap">
 <style>
@@ -375,9 +375,9 @@ button,select,input{font-family:inherit}
       <div class="login-brand-icon">
         <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 3H8a2 2 0 00-2 2v2h12V5a2 2 0 00-2-2z"/></svg>
       </div>
-      <div class="login-app-name">SabStore</div>
+      <div class="login-app-name">Nexper</div>
     </div>
-    <div class="login-tagline">Store Management &amp; Billing System</div>
+    <div class="login-tagline">Smart Billing &amp; Ledger for Your Dukan</div>
     <div id="google-signin-btn" style="display:flex;justify-content:center;min-height:44px"></div>
     <p style="font-size:11px;color:var(--t3);margin-top:20px">Sign in with your Google account to access your store</p>
   </div>
@@ -390,7 +390,7 @@ button,select,input{font-family:inherit}
 <nav class="sidebar" id="sidebar">
   <div class="sb-logo">
     <div class="store-name" id="sb-store-name">Sharma Kirana Store</div>
-    <div class="store-sub">Daily Ledger &amp; Billing</div>
+    <div class="store-sub">Billing &amp; Ledger by Nexper</div>
   </div>
   <div class="sb-user" id="sb-user" style="display:none">
     <div class="sb-user-initial" id="sb-user-initial">?</div>
@@ -2473,7 +2473,7 @@ function exportData() {
   var payload = {
     _version: 1,
     _exported: new Date().toISOString(),
-    _store: settings.storeName || 'SabStore',
+    _store: settings.storeName || 'Nexper',
     products:  JSON.parse(JSON.stringify(products)),
     sales:     JSON.parse(JSON.stringify(sales)),
     customers: JSON.parse(JSON.stringify(customers)),
@@ -2486,7 +2486,7 @@ function exportData() {
   var url  = URL.createObjectURL(blob);
   var a    = document.createElement('a');
   var date = new Date().toISOString().slice(0,10);
-  a.href = url; a.download = 'sabstore-backup-'+date+'.json';
+  a.href = url; a.download = 'nexper-backup-'+date+'.json';
   document.body.appendChild(a); a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
