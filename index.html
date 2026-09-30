@@ -291,6 +291,57 @@ button,select,input{font-family:inherit}
 .empty-ico{font-size:32px;margin-bottom:10px}
 .empty-txt{font-size:14px;font-weight:600}
 
+/* ── Landing page ────────────────────────────────────── */
+.lp{min-height:100vh;background:#F7F9FC;font-family:'Nunito Sans',system-ui,sans-serif;color:#1B2B4B}
+.lp-nav{display:flex;align-items:center;justify-content:space-between;padding:0 5vw;height:64px;background:#fff;border-bottom:1px solid #E5EAF2;position:sticky;top:0;z-index:100}
+.lp-logo{display:flex;align-items:baseline;gap:0;font-size:26px;font-weight:800;letter-spacing:-1px;line-height:1}
+.lp-logo-ne,.lp-logo-per{color:#1B2B4B}
+.lp-logo-x{color:#3B82F6}
+.lp-nav-right{display:flex;align-items:center;gap:12px}
+.lp-login-btn{padding:9px 22px;border:2px solid #1B2B4B;border-radius:8px;background:none;color:#1B2B4B;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .18s}
+.lp-login-btn:hover{background:#1B2B4B;color:#fff}
+.lp-cta-btn{padding:10px 24px;border:none;border-radius:8px;background:#1B2B4B;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .18s}
+.lp-cta-btn:hover{background:#264B6E}
+.lp-hero{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;padding:72px 5vw 64px;max-width:1160px;margin:0 auto}
+.lp-hero-badge{display:inline-flex;align-items:center;gap:7px;background:#EBF0FB;color:#3B82F6;font-size:12px;font-weight:700;padding:5px 13px;border-radius:20px;margin-bottom:18px;letter-spacing:0.04em;text-transform:uppercase}
+.lp-hero-h1{font-size:clamp(30px,4vw,50px);font-weight:800;line-height:1.15;letter-spacing:-1.5px;color:#1B2B4B;margin-bottom:18px;text-wrap:balance}
+.lp-hero-h1 span{color:#3B82F6}
+.lp-hero-sub{font-size:16px;color:#5A6A7E;line-height:1.7;margin-bottom:32px;max-width:480px}
+.lp-hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+.lp-btn-primary{padding:14px 30px;background:#1B2B4B;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .18s;display:flex;align-items:center;gap:8px}
+.lp-btn-primary:hover{background:#264B6E;transform:translateY(-1px)}
+.lp-btn-secondary{padding:14px 26px;background:#fff;color:#1B2B4B;border:2px solid #D0D7E3;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .18s}
+.lp-btn-secondary:hover{border-color:#3B82F6;color:#3B82F6}
+.lp-hero-visual{display:flex;justify-content:center}
+.lp-mockup{background:#fff;border:1px solid #E2E8F2;border-radius:16px;box-shadow:0 8px 40px rgba(27,43,75,0.12);padding:24px;width:100%;max-width:400px}
+.lp-mock-topbar{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #F0F3F8}
+.lp-mock-dot{width:10px;height:10px;border-radius:50%}
+.lp-mock-title{font-size:13px;font-weight:700;color:#1B2B4B;margin-left:4px}
+.lp-mock-stat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px}
+.lp-mock-stat{background:#F7F9FC;border-radius:10px;padding:12px;text-align:center}
+.lp-mock-stat-val{font-size:20px;font-weight:800;color:#1B2B4B;font-variant-numeric:tabular-nums}
+.lp-mock-stat-lbl{font-size:9px;color:#8A97A8;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+.lp-mock-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid #F0F3F8;font-size:12px}
+.lp-mock-row:last-child{border:none}
+.lp-mock-name{color:#1B2B4B;font-weight:600}
+.lp-mock-amt{font-weight:700;font-variant-numeric:tabular-nums}
+.lp-mock-badge{font-size:9px;font-weight:700;padding:3px 7px;border-radius:20px}
+.lp-feat{background:#fff;padding:64px 5vw;border-top:1px solid #E5EAF2}
+.lp-feat-inner{max-width:1100px;margin:0 auto}
+.lp-feat-head{text-align:center;margin-bottom:44px}
+.lp-feat-head h2{font-size:clamp(22px,3vw,34px);font-weight:800;letter-spacing:-1px;color:#1B2B4B;margin-bottom:10px}
+.lp-feat-head p{font-size:15px;color:#6B7A8D;max-width:480px;margin:0 auto}
+.lp-feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+.lp-feat-card{background:#F7F9FC;border:1px solid #E5EAF2;border-radius:14px;padding:28px 24px;transition:box-shadow .18s,transform .14s}
+.lp-feat-card:hover{box-shadow:0 6px 24px rgba(59,130,246,0.1);transform:translateY(-3px);border-color:#C5D5F5}
+.lp-feat-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.lp-feat-card h3{font-size:15px;font-weight:700;color:#1B2B4B;margin-bottom:6px}
+.lp-feat-card p{font-size:13px;color:#6B7A8D;line-height:1.6}
+.lp-footer{background:#1B2B4B;color:rgba(255,255,255,0.6);text-align:center;padding:28px 5vw;font-size:13px}
+.lp-footer strong{color:#fff}
+@media(max-width:700px){.lp-hero{grid-template-columns:1fr;padding:44px 5vw 36px}.lp-hero-visual{display:none}.lp-feat-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.lp-feat-grid{grid-template-columns:1fr}}
+
 /* Login overlay */
 .login-overlay{position:fixed;inset:0;z-index:9000;background:var(--bg);display:flex;align-items:center;justify-content:center}
 .login-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);box-shadow:var(--sh2);padding:48px 40px;text-align:center;width:380px;max-width:90vw}
@@ -391,6 +442,89 @@ button,select,input{font-family:inherit}
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<!-- LANDING PAGE -->
+<div id="landing-page" style="display:none">
+  <nav class="lp-nav">
+    <div class="lp-logo"><span class="lp-logo-ne">Ne</span><span class="lp-logo-x">x</span><span class="lp-logo-per">per</span></div>
+    <div class="lp-nav-right">
+      <button class="lp-login-btn" onclick="showLoginOverlay()">Login</button>
+      <button class="lp-cta-btn" onclick="showLoginOverlay()">Get Started Free</button>
+    </div>
+  </nav>
+
+  <section class="lp-hero">
+    <div class="lp-hero-left">
+      <div class="lp-hero-badge">
+        <svg width="13" height="13" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+        Made for Kirana &amp; Dukan Owners
+      </div>
+      <h1 class="lp-hero-h1">Billing &amp; Khata,<br><span>Smart &amp; Simple.</span></h1>
+      <p class="lp-hero-sub">Create bills in seconds, track customer credit (khata), accept UPI payments and share receipts on WhatsApp — all from one app.</p>
+      <div class="lp-hero-btns">
+        <button class="lp-btn-primary" onclick="showLoginOverlay()">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+          Start for Free
+        </button>
+        <button class="lp-btn-secondary" onclick="showLoginOverlay()">Login to Your Store</button>
+      </div>
+    </div>
+    <div class="lp-hero-visual">
+      <div class="lp-mockup">
+        <div class="lp-mock-topbar">
+          <div class="lp-mock-dot" style="background:#E8960E"></div>
+          <div class="lp-mock-dot" style="background:#3B82F6"></div>
+          <div class="lp-mock-dot" style="background:#2A7A4F"></div>
+          <div class="lp-mock-title">Nexper Dashboard</div>
+        </div>
+        <div class="lp-mock-stat-row">
+          <div class="lp-mock-stat"><div class="lp-mock-stat-val" style="color:#E8960E">₹18.4k</div><div class="lp-mock-stat-lbl">Today</div></div>
+          <div class="lp-mock-stat"><div class="lp-mock-stat-val" style="color:#1B2B4B">47</div><div class="lp-mock-stat-lbl">Bills</div></div>
+          <div class="lp-mock-stat"><div class="lp-mock-stat-val" style="color:#2A7A4F">₹3.2k</div><div class="lp-mock-stat-lbl">Received</div></div>
+        </div>
+        <div class="lp-mock-row"><span class="lp-mock-name">Ramesh Kumar</span><span class="lp-mock-badge" style="background:#EBF7F1;color:#2A7A4F">Paid</span><span class="lp-mock-amt" style="color:#2A7A4F">₹840</span></div>
+        <div class="lp-mock-row"><span class="lp-mock-name">Suresh Babu</span><span class="lp-mock-badge" style="background:#FEF3E8;color:#B85C10">Udhar</span><span class="lp-mock-amt" style="color:#B85C10">₹1,200</span></div>
+        <div class="lp-mock-row"><span class="lp-mock-name">Priya Stores</span><span class="lp-mock-badge" style="background:#EBF7F1;color:#2A7A4F">UPI</span><span class="lp-mock-amt" style="color:#2A7A4F">₹560</span></div>
+        <div class="lp-mock-row"><span class="lp-mock-name">Ahmed Bhai</span><span class="lp-mock-badge" style="background:#EBF7F1;color:#2A7A4F">Cash</span><span class="lp-mock-amt" style="color:#2A7A4F">₹320</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="lp-feat">
+    <div class="lp-feat-inner">
+      <div class="lp-feat-head">
+        <h2>Everything your dukan needs</h2>
+        <p>Built for small shop owners — no accountant needed.</p>
+      </div>
+      <div class="lp-feat-grid">
+        <div class="lp-feat-card">
+          <div class="lp-feat-icon" style="background:#EBF0FB"><svg width="22" height="22" fill="none" stroke="#3B82F6" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div>
+          <h3>Fast Billing</h3>
+          <p>Create and print GST bills in under 10 seconds. Add items with barcode or name search.</p>
+        </div>
+        <div class="lp-feat-card">
+          <div class="lp-feat-icon" style="background:#EBF7F1"><svg width="22" height="22" fill="none" stroke="#2A7A4F" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg></div>
+          <h3>Khata / Udhar</h3>
+          <p>Track who owes you money. Send payment reminders via WhatsApp with one tap.</p>
+        </div>
+        <div class="lp-feat-card">
+          <div class="lp-feat-icon" style="background:#FEF3E8"><svg width="22" height="22" fill="none" stroke="#E8960E" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8H3a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2v-6a2 2 0 00-2-2h-2m-6-4v4"/></svg></div>
+          <h3>UPI QR Payments</h3>
+          <p>Show a UPI QR code on every bill. Customer scans and pays instantly — no cash handling.</p>
+        </div>
+        <div class="lp-feat-card">
+          <div class="lp-feat-icon" style="background:#F0FDF4"><svg width="22" height="22" fill="none" stroke="#25D366" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg></div>
+          <h3>WhatsApp Bills</h3>
+          <p>Share receipts directly on WhatsApp. Customers get a clean bill on their phone instantly.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="lp-footer">
+    <strong>Nexper</strong> — Smart Billing &amp; Ledger for Your Dukan &nbsp;·&nbsp; nexper.in
+  </footer>
+</div>
 
 <!-- LOGIN SCREEN -->
 <div class="login-overlay" id="login-overlay" style="display:none">
@@ -2615,7 +2749,7 @@ function initFirebaseAuth() {
   if (_authUser) {
     showApp();
   } else {
-    document.getElementById('login-overlay').style.display = 'flex';
+    document.getElementById('landing-page').style.display = 'block';
   }
 
   // Firebase auth state listener handles token refresh / sign-out
@@ -2639,6 +2773,11 @@ function initFirebaseAuth() {
       }
     }
   });
+}
+
+function showLoginOverlay() {
+  document.getElementById('landing-page').style.display = 'none';
+  document.getElementById('login-overlay').style.display = 'flex';
 }
 
 function signInWithGoogle() {
@@ -2700,6 +2839,7 @@ function showLoginError(msg) {
 
 function showApp() {
   _appAlreadyShown = true;
+  document.getElementById('landing-page').style.display = 'none';
   document.getElementById('login-overlay').style.display = 'none';
   document.getElementById('app-shell').style.display    = 'flex';
   const wrap = document.getElementById('user-avatar-wrap');
