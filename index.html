@@ -351,7 +351,9 @@ button,select,input{font-family:inherit}
 
 /* Login overlay */
 .login-overlay{position:fixed;inset:0;z-index:9000;background:var(--bg);display:flex;align-items:center;justify-content:center}
-.login-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);box-shadow:var(--sh2);padding:48px 40px;text-align:center;width:380px;max-width:90vw}
+.login-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);box-shadow:var(--sh2);padding:48px 40px;text-align:center;width:380px;max-width:90vw;position:relative}
+.login-close-btn{position:absolute;top:12px;right:14px;background:none;border:none;font-size:24px;color:var(--t3);cursor:pointer;line-height:1;padding:4px 8px;border-radius:6px}
+.login-close-btn:hover{background:var(--bg);color:var(--t1)}
 .login-brand{margin-bottom:28px}
 .login-wordmark{padding:22px 32px 18px;background:linear-gradient(120deg,rgba(27,50,82,0.09) 0%,rgba(59,130,246,0.07) 50%,rgba(27,50,82,0.09) 100%);border-radius:14px;border:1px solid rgba(59,130,246,0.15);text-align:center}
 .lw-text{font-family:'Nunito Sans',system-ui,sans-serif;font-size:48px;font-weight:800;letter-spacing:-2px;line-height:1;display:flex;align-items:baseline;justify-content:center}
@@ -572,8 +574,9 @@ button,select,input{font-family:inherit}
 </div>
 
 <!-- LOGIN SCREEN -->
-<div class="login-overlay" id="login-overlay" style="display:none">
+<div class="login-overlay" id="login-overlay" style="display:none" onclick="if(event.target===this)hideLoginOverlay()">
   <div class="login-card">
+    <button class="login-close-btn" onclick="hideLoginOverlay()" aria-label="Close">&times;</button>
     <div class="login-brand">
       <div class="login-wordmark">
         <div class="lw-text"><span class="lw-ne">Ne</span><span class="lw-x">x</span><span class="lw-per">per</span></div>
@@ -2905,6 +2908,10 @@ function showLoginOverlay() {
   document.getElementById('landing-page').style.display = 'none';
   document.getElementById('login-overlay').style.display = 'flex';
   renderGISButton();
+}
+function hideLoginOverlay() {
+  document.getElementById('login-overlay').style.display = 'none';
+  document.getElementById('landing-page').style.display = 'block';
 }
 
 function showLoginStep(step) {
