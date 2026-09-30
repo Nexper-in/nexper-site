@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Full bleed background — OS clips to rounded square shape -->
+  <rect width="512" height="512" fill="#1B2B4B"/>
+  <!-- Subtle gradient overlay for depth -->
+  <rect width="512" height="512" fill="url(#grad)" opacity="0.4"/>
+  <defs>
+    <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#264B6E"/>
+      <stop offset="100%" stop-color="#111B2E"/>
+    </linearGradient>
+  </defs>
+  <!-- N — white, bold -->
+  <text x="68" y="370" font-family="Arial Black,Arial,sans-serif" font-size="290" font-weight="900" fill="#FFFFFF" letter-spacing="-8">N</text>
+  <!-- x — blue accent -->
+  <text x="268" y="370" font-family="Arial Black,Arial,sans-serif" font-size="230" font-weight="900" fill="#3B82F6">x</text>
+</svg>
