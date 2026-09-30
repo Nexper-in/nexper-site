@@ -2753,6 +2753,15 @@ function initFirebaseAuth() {
     document.getElementById('landing-page').style.display = 'block';
   }
 
+  // Handle redirect result (after Google sign-in redirect back to nexper.in)
+  _fbAuth.getRedirectResult().catch(function(err) {
+    if (err && err.code !== 'auth/no-current-user') {
+      document.getElementById('landing-page').style.display = 'block';
+      showLoginOverlay();
+      showLoginError('Google sign-in failed. Please try again.');
+    }
+  });
+
   // Firebase auth state listener handles token refresh / sign-out
   _fbAuth.onAuthStateChanged(function(user) {
     if (user) {
@@ -2783,9 +2792,7 @@ function showLoginOverlay() {
 
 function signInWithGoogle() {
   var provider = new firebase.auth.GoogleAuthProvider();
-  _fbAuth.signInWithPopup(provider).catch(function(err) {
-    showLoginError('Google sign-in failed. Please try again.');
-  });
+  _fbAuth.signInWithRedirect(provider);
 }
 
 function showLoginStep(step) {
