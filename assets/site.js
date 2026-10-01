@@ -4,17 +4,23 @@
   var btn = document.querySelector(".menu-btn");
   var menu = document.getElementById("mobile-menu");
 
+  // Swap the menu/close icon, keeping the sprite URL (and its version) as is.
+  function setIcon(name) {
+    var use = btn.querySelector("use");
+    use.setAttribute("href", use.getAttribute("href").split("#")[0] + "#" + name);
+  }
+
   if (btn && menu) {
     btn.addEventListener("click", function () {
       var open = menu.classList.toggle("open");
       btn.setAttribute("aria-expanded", String(open));
-      btn.querySelector("use").setAttribute("href", "/assets/icons.svg?v=3e08ac56#" + (open ? "x" : "menu"));
+      setIcon(open ? "x" : "menu");
     });
     menu.addEventListener("click", function (e) {
       if (e.target.tagName === "A") {
         menu.classList.remove("open");
         btn.setAttribute("aria-expanded", "false");
-        btn.querySelector("use").setAttribute("href", "/assets/icons.svg?v=3e08ac56#menu");
+        setIcon("menu");
       }
     });
   }

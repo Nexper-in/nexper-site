@@ -1,0 +1,17 @@
+name: Site checks
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  translations:
+    name: Pages and translations up to date
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check every language is complete and the pages are regenerated
+        run: python3 tools/build.py --check
