@@ -8,7 +8,7 @@ CSS with no build step, so Vercel serves the files as they are.
 | `index.html` | Landing page |
 | `privacy/`, `terms/`, `contact/` | Legal and contact pages |
 | `404.html` | Not-found page |
-| `assets/site.css` | All styles (brand colours are the variables at the top) |
+| `assets/site.css` | All styles. Base tokens at the top; the Aurora theme (purple-to-dark background) at the bottom overrides them |
 | `assets/icons.svg` | Icon sprite (Lucide icons) |
 | `assets/site.js` | Mobile menu, header shadow, footer year |
 | `sw.js` | Removes the old prototype's service worker from visitors' browsers |

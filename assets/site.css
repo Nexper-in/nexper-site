@@ -1,5 +1,5 @@
-/* Nexper marketing site. Colours come from the Nexper wordmark:
-   navy ink, electric-blue "x", warm cream paper. */
+/* Nexper marketing site. Base tokens first, then the Aurora theme at the
+   bottom of this file overrides them (purple-to-dark page background). */
 
 :root {
   --ink: #16213d;
@@ -8,9 +8,16 @@
   --blue: #2b5bff;
   --blue-ink: #1d47e0;
   --blue-soft: #e7edff;
-  --cream: #f4f1eb;
-  --cream-2: #ebe6dc;
-  --paper: #ffffff;
+  --bg: #f4f1eb;
+  --hover: #ebe6dc;
+  --surface: #ffffff;
+  --demo-bg: #f4f1eb;
+  --header-bg: rgba(244, 241, 235, 0.88);
+  --screen-bg: #f6f5f2;
+  --strong: #16213d;
+  --on-strong: #ffffff;
+  --band: #16213d;
+  --phone: #16213d;
   --line: #e2dccf;
   --green: #1f8a5f;
   --green-soft: #e4f4ec;
@@ -43,7 +50,7 @@ html {
 
 body {
   margin: 0;
-  background: var(--cream);
+  background: var(--bg);
   color: var(--ink);
   font-family: var(--font-body);
   font-size: 16px;
@@ -93,8 +100,8 @@ p {
   position: absolute;
   left: 12px;
   top: -60px;
-  background: var(--ink);
-  color: #fff;
+  background: var(--strong);
+  color: var(--on-strong);
   padding: 10px 14px;
   border-radius: 10px;
   z-index: 100;
@@ -162,19 +169,19 @@ p {
   background: var(--blue-ink);
 }
 .btn-dark {
-  background: var(--ink);
-  color: #fff;
+  background: var(--strong);
+  color: var(--on-strong);
 }
 .btn-dark:hover {
-  background: #0d1530;
+  opacity: 0.9;
 }
 .btn-ghost {
   border-color: var(--ink);
   color: var(--ink);
 }
 .btn-ghost:hover {
-  background: var(--ink);
-  color: #fff;
+  background: var(--strong);
+  color: var(--on-strong);
 }
 .btn-light {
   background: #fff;
@@ -190,7 +197,7 @@ p {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(244, 241, 235, 0.88);
+  background: var(--header-bg);
   backdrop-filter: saturate(1.4) blur(12px);
   -webkit-backdrop-filter: saturate(1.4) blur(12px);
   border-bottom: 1px solid transparent;
@@ -219,7 +226,7 @@ p {
   border-radius: 999px;
 }
 .nav a:hover {
-  background: var(--cream-2);
+  background: var(--hover);
   color: var(--ink);
 }
 .header-actions {
@@ -273,7 +280,7 @@ p {
     display: block;
     border-top: 1px solid var(--line);
     padding: 8px 20px 20px;
-    background: var(--cream);
+    background: var(--bg);
   }
   .mobile-menu a {
     display: block;
@@ -380,20 +387,21 @@ p {
 .phone {
   position: relative;
   width: 290px;
-  background: var(--ink);
+  background: var(--phone);
   border-radius: 42px;
   padding: 10px;
   box-shadow: var(--shadow-lg);
   transform: rotate(-2deg);
 }
 .screen {
-  background: #f6f5f2;
+  color: var(--ink);
+  background: var(--screen-bg);
   border-radius: 33px;
   overflow: hidden;
   font-size: 13px;
 }
 .screen-top {
-  background: var(--paper);
+  background: var(--surface);
   padding: 22px 16px 12px;
   border-bottom: 1px solid #ece9e2;
 }
@@ -415,7 +423,7 @@ p {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: var(--paper);
+  background: var(--surface);
   border-radius: 12px;
   padding: 9px 11px;
 }
@@ -436,7 +444,7 @@ p {
 }
 .pay {
   display: flex;
-  background: var(--paper);
+  background: var(--surface);
   border-radius: 10px;
   padding: 3px;
   margin-top: 3px;
@@ -468,8 +476,8 @@ p {
   color: var(--ink);
 }
 .screen-cta {
-  background: var(--ink);
-  color: #fff;
+  background: var(--strong);
+  color: var(--on-strong);
   text-align: center;
   border-radius: 12px;
   padding: 11px;
@@ -479,12 +487,13 @@ p {
 }
 
 .chip {
+  color: var(--ink);
   position: absolute;
   z-index: 2;
   display: flex;
   align-items: center;
   gap: 10px;
-  background: var(--paper);
+  background: var(--surface);
   border-radius: 14px;
   padding: 10px 14px 10px 10px;
   box-shadow: var(--shadow);
@@ -595,7 +604,7 @@ p {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: var(--paper);
+  background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 999px;
   padding: 8px 14px;
@@ -647,7 +656,7 @@ p {
   grid-template-columns: 1fr 1fr;
   gap: 40px;
   align-items: center;
-  background: var(--paper);
+  background: var(--surface);
   border-radius: 28px;
   padding: 44px;
   border: 1px solid var(--line);
@@ -685,7 +694,7 @@ p {
   stroke-width: 2.6;
 }
 .demo {
-  background: var(--cream);
+  background: var(--demo-bg);
   border-radius: 20px;
   padding: 22px;
   display: grid;
@@ -693,7 +702,7 @@ p {
   font-size: 14px;
 }
 .demo-card {
-  background: var(--paper);
+  background: var(--surface);
   border-radius: 14px;
   padding: 12px 14px;
   display: flex;
@@ -757,7 +766,7 @@ p {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: var(--paper);
+  background: var(--surface);
   border: 2px solid var(--blue);
   border-radius: 14px;
   padding: 11px 14px;
@@ -809,7 +818,7 @@ p {
   margin-top: 24px;
 }
 .card {
-  background: var(--paper);
+  background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 24px;
@@ -853,7 +862,7 @@ p {
 }
 .step {
   position: relative;
-  background: var(--paper);
+  background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 28px 24px 24px;
@@ -867,8 +876,8 @@ p {
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: var(--ink);
-  color: #fff;
+  background: var(--strong);
+  color: var(--on-strong);
 }
 .step h3 {
   font-size: 20px;
@@ -902,7 +911,7 @@ p {
 
 /* Coming soon */
 .soon {
-  background: var(--ink);
+  background: var(--band);
   color: #fff;
   border-radius: 32px;
   padding: 56px 44px;
@@ -974,7 +983,7 @@ p {
   margin: 0 auto;
 }
 .plan {
-  background: var(--paper);
+  background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 24px;
   padding: 30px;
@@ -982,15 +991,15 @@ p {
   flex-direction: column;
 }
 .plan.featured {
-  border: 2px solid var(--ink);
+  border: 2px solid var(--strong);
   position: relative;
 }
 .plan-badge {
   position: absolute;
   top: -13px;
   right: 24px;
-  background: var(--ink);
-  color: #fff;
+  background: var(--strong);
+  color: var(--on-strong);
   font-size: 12px;
   font-weight: 700;
   padding: 4px 12px;
@@ -1040,7 +1049,7 @@ p {
   gap: 10px;
 }
 .faq details {
-  background: var(--paper);
+  background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 16px;
   padding: 0 22px;
@@ -1223,7 +1232,7 @@ p {
   display: flex;
   gap: 14px;
   align-items: flex-start;
-  background: var(--paper);
+  background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 22px;
@@ -1266,4 +1275,96 @@ p {
   color: var(--ink-2);
   font-size: 18px;
   margin: 16px 0 28px;
+}
+
+/* Aurora theme: one continuous background, light AI purple at the top flowing
+   into near-black at the bottom of the page. */
+:root {
+  --ink: #ffffff;
+  --ink-2: rgba(255, 255, 255, 0.82);
+  --muted: rgba(255, 255, 255, 0.62);
+  --blue: #c7b6ff;
+  --blue-ink: #d9cdff;
+  --blue-soft: rgba(255, 255, 255, 0.12);
+  --bg: transparent;
+  --hover: rgba(255, 255, 255, 0.1);
+  --surface: rgba(255, 255, 255, 0.07);
+  --line: rgba(255, 255, 255, 0.14);
+  --demo-bg: rgba(10, 6, 30, 0.28);
+  --header-bg: rgba(60, 36, 150, 0.55);
+  --strong: #ffffff;
+  --on-strong: #3a1fa8;
+  --band: rgba(255, 255, 255, 0.06);
+  --phone: #0c0822;
+  --green-soft: rgba(52, 199, 132, 0.18);
+  --green: #6ee7b7;
+  --amber-soft: rgba(245, 158, 66, 0.18);
+  --amber: #fbbf6a;
+  --red-soft: rgba(240, 98, 88, 0.18);
+  --red: #ff8a80;
+  --shadow: 0 10px 30px rgba(8, 4, 30, 0.35);
+}
+body {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #8b6cff 0%, #6a46ee 9%, #4a2bc4 20%, #2c1a86 38%, #170f4a 60%, #0b0820 82%, #07060f 100%);
+  background-color: #07060f;
+}
+.hero h1 em {
+  background: linear-gradient(90deg, #ffffff 0%, #e2d6ff 45%, #ffc2f0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.wordmark span {
+  color: #ffc2f0;
+}
+.btn-primary {
+  background: #ffffff;
+  color: #3a1fa8;
+  box-shadow: 0 12px 30px -10px rgba(20, 8, 70, 0.6);
+}
+.btn-primary:hover {
+  background: #efe9ff;
+}
+.checks .ico,
+.ticks .ico {
+  color: #6ee7b7;
+}
+.phone-stage::before {
+  background: radial-gradient(circle, rgba(255, 194, 240, 0.35), rgba(255, 194, 240, 0) 70%);
+}
+.phone {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+/* The phone screen and floating chips stay light, like the real app. */
+.screen,
+.chip {
+  --ink: #1a1440;
+  --muted: #6b6690;
+  --surface: #ffffff;
+  --strong: #24135f;
+  --on-strong: #ffffff;
+  --blue: #6d4aff;
+  --green-soft: #e4f4ec;
+  --green: #1f8a5f;
+  --amber-soft: #fcefdf;
+  --amber: #b45d0e;
+  --red-soft: #fbe8e6;
+  --red: #c8423a;
+  color: var(--ink);
+}
+.screen {
+  background: #f4f2ff;
+}
+.soon {
+  border: 1px solid var(--line);
+}
+.closing-box {
+  background: linear-gradient(135deg, #7b5cfa 0%, #a64be8 55%, #e05fb5 100%);
+}
+.shops {
+  border-color: var(--line);
+}
+.btn-light {
+  color: #3a1fa8;
 }
