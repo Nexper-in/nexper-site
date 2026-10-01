@@ -1,29 +1,21 @@
-const CACHE = 'nexper-v1';
-const OFFLINE_ASSETS = ['/', '/manifest.json', '/icon.svg'];
-
-self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(CACHE).then(c => c.addAll(OFFLINE_ASSETS)).then(() => self.skipWaiting())
-  );
+// The old nexper.in prototype registered a caching service worker at /sw.js.
+// This replacement removes it: it clears every cache, unregisters itself and
+// reloads open tabs so visitors get the live site instead of a stale copy.
+self.addEventListener("install", function () {
+  self.skipWaiting();
 });
 
-self.addEventListener('activate', e => {
-  e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-    ).then(() => self.clients.claim())
-  );
-});
-
-self.addEventListener('fetch', e => {
-  if (e.request.method !== 'GET') return;
-  e.respondWith(
-    fetch(e.request)
-      .then(res => {
-        const clone = res.clone();
-        caches.open(CACHE).then(c => c.put(e.request, clone));
-        return res;
+self.addEventListener("activate", function (event) {
+  event.waitUntil(
+    caches
+      .keys()
+      .then(function (keys) {
+        return Promise.all(keys.map(function (k) { return caches.delete(k); }));
       })
-      .catch(() => caches.match(e.request))
+      .then(function () { return self.registration.unregister(); })
+      .then(function () { return self.clients.matchAll({ type: "window" }); })
+      .then(function (clients) {
+        clients.forEach(function (c) { c.navigate(c.url); });
+      })
   );
 });
