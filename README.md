@@ -12,7 +12,7 @@ CSS with no build step, so Vercel serves the files as they are.
 | `assets/icons.svg` | Icon sprite (Lucide icons) |
 | `assets/site.js` | Mobile menu, header shadow, footer year |
 | `sw.js` | Removes the old prototype's service worker from visitors' browsers |
-| `og.png` | Image shown when the link is shared on WhatsApp and social apps |
+| `og.jpg` | Image shown when the link is shared on WhatsApp and social apps |
 
 The previous prototype app that lived here is kept on the `legacy-prototype`
 branch.
