@@ -8,13 +8,13 @@
     btn.addEventListener("click", function () {
       var open = menu.classList.toggle("open");
       btn.setAttribute("aria-expanded", String(open));
-      btn.querySelector("use").setAttribute("href", "/assets/icons.svg#" + (open ? "x" : "menu"));
+      btn.querySelector("use").setAttribute("href", "/assets/icons.svg?v=3e08ac56#" + (open ? "x" : "menu"));
     });
     menu.addEventListener("click", function (e) {
       if (e.target.tagName === "A") {
         menu.classList.remove("open");
         btn.setAttribute("aria-expanded", "false");
-        btn.querySelector("use").setAttribute("href", "/assets/icons.svg#menu");
+        btn.querySelector("use").setAttribute("href", "/assets/icons.svg?v=3e08ac56#menu");
       }
     });
   }
