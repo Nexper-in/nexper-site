@@ -88,3 +88,11 @@ list from the picker, so it needs no change.
   and is English-only for now.
 - Support contact details: `SUPPORT_EMAIL` and `SUPPORT_WHATSAPP` at the top of
   `tools/build.py`. The contact cards appear once they are set.
+
+## Language follows the visitor into the app
+
+The app is on another address (app.nexper.in), so the chosen language is passed
+on two ways: every link to the app gets `?lang=xx` (added by `assets/i18n.js`),
+and a cookie `nexper_lang` on `.nexper.in` is shared with the app. Don't hard-
+code links to the app without going through the `APP` constant in
+`tools/build.py` (the script adds the language to them in the browser).

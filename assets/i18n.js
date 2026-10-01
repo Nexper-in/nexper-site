@@ -55,16 +55,41 @@
       });
   }
 
+  // The app lives on app.nexper.in, so a localStorage choice here can't reach
+  // it. A cookie on .nexper.in is shared by both, and the sign-in links also
+  // carry ?lang=, so the app opens in the language chosen on this site.
+  var COOKIE = "nexper_lang";
+  function sharedDomain() {
+    return /(^|\.)nexper\.in$/.test(location.hostname) ? "; domain=.nexper.in" : "";
+  }
+  function readCookie() {
+    var m = document.cookie.match(new RegExp("(?:^|; )" + COOKIE + "=([^;]*)"));
+    return m ? decodeURIComponent(m[1]) : null;
+  }
   function save(code) {
     try {
       localStorage.setItem(STORE_KEY, code);
     } catch (e) {}
+    try {
+      document.cookie = COOKIE + "=" + code + sharedDomain() + "; path=/; max-age=31536000; SameSite=Lax";
+    } catch (e) {}
+  }
+
+  // Every link into the app carries the current language.
+  function syncAppLinks(code) {
+    Array.prototype.forEach.call(document.querySelectorAll('a[href*="app.nexper.in"]'), function (a) {
+      try {
+        var u = new URL(a.getAttribute("href"), location.href);
+        u.searchParams.set("lang", code);
+        a.setAttribute("href", u.toString());
+      } catch (e) {}
+    });
   }
 
   function initial() {
     var l = null;
     try {
-      l = new URLSearchParams(location.search).get("lang") || localStorage.getItem(STORE_KEY);
+      l = new URLSearchParams(location.search).get("lang") || readCookie() || localStorage.getItem(STORE_KEY);
     } catch (e) {}
     if (l && langs[l]) return l;
     var nav = navigator.languages || [navigator.language || "en"];
@@ -122,6 +147,7 @@
   function setLanguage(code, remember) {
     if (!langs[code]) code = "en";
     if (remember) save(code);
+    syncAppLinks(code);
     if (code === "en") return apply("en", null);
     loadFont(code);
     fetchDict(code)
